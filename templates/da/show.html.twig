@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du DA{% endblock %}
+
+{% block body %}
+    <h1>Détails du DA</h1>
+
+    <table class="table">
+        <tr><th>Référence DA</th><td>{{ d_a.ReferenceDA }}</td></tr>
+        <tr><th>Date création</th><td>{{ d_a.DateCreationDA|date('Y-m-d') }}</td></tr>
+        <tr><th>État</th><td>{{ d_a.EtatDA }}</td></tr>
+        <tr><th>Article</th><td>{{ d_a.Article }}</td></tr>
+        <tr><th>Département Chantier</th><td>{{ d_a.ChantierDepartement }}</td></tr>
+        <tr><th>Description</th><td>{{ d_a.Description }}</td></tr>
+        <tr><th>Réf BCA</th><td>{{ d_a.ReferenceBCA }}</td></tr>
+        <tr><th>Création BCA</th><td>{{ d_a.CreationBCA ? d_a.CreationBCA|date('Y-m-d') : '' }}</td></tr>
+        <tr><th>Retard DA-BCA</th><td>{{ d_a.retardDABCA }} jours</td></tr>
+        <tr><th>Retard Livraison</th><td>{{ d_a.retardLivraison }} jours</td></tr>
+        <tr><th>Fournisseur</th><td>{{ d_a.Fournisseur }}</td></tr>
+        <tr><th>Date Livraison</th><td>{{ d_a.DateLivraison ? d_a.DateLivraison|date('Y-m-d') : '' }}</td></tr>
+    </table>
+
+    <a href="{{ path('app_d_a_edit', {id: d_a.id}) }}" class="btn btn-warning">Modifier</a>
+    {{ include('da/_delete_form.html.twig', { d_a: d_a }) }}
+    <a href="{{ path('app_d_a_index') }}" class="btn btn-secondary">Retour</a>
+{% endblock %}

@@ -1,0 +1,60 @@
+<style>
+    .form-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 15px; 
+        background-color: #f8f9fa;
+    }
+
+    .form-card {
+        background-color: white;
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); 
+        width: 100%;
+        max-width: 600px;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); 
+    }
+
+    .form-title {
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        color: hsl(241, 100.00%, 53.90%);
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="form-card">
+        <div class="form-title">DEMANDE D'ACHAT</div>
+
+        {{ form_start(form) }}
+
+            {% for field in form %}
+                {% if field.vars.name != '_token' %}
+                    <div class="mb-3">
+                        {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(field) }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <div class="text-center mt-4">
+                <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+            </div>
+
+        {{ form_end(form) }}
+
+        <div class="text-center mt-3">
+            <a href="{{ path('app_d_a_index') }}">Retour sur la liste</a>
+        </div>
+    </div>
+</div>

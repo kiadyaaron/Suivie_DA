@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suivi des demandes d'achat{% endblock %}
+
+{% block body %}
+    <h1>Liste des Demandes d'Achat</h1>
+
+<a href="{{ path('app_d_a_new') }}" class="btn btn-success mb-3">+ Nouvelle DA</a>
+
+<div>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark text-nowrap">
+            <tr>
+                <th>Référence DA</th>
+                <th>Date Création</th>
+                <th>État</th>
+                <th>Article</th>
+                <th>Département ou chantier</th>
+                <th>Description</th>
+                <th>Réf BCA</th>
+                <th>Création BCA</th>
+                <th>Retard DA-BCA</th>
+                <th>Retard Livraison</th>
+                <th>Fournisseur</th>
+                <th>Date Livraison</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d_a in d_as %}
+                <tr class="text-nowrap">
+                    <td>{{ d_a.referenceDA }}</td>
+                    <td>{{ d_a.dateCreationDA ? d_a.dateCreationDA|date('d/m/Y') : '' }}</td>
+                    <td>{{ d_a.etatDA }}</td>
+                    <td>{{ d_a.article }}</td>
+                    <td>{{ d_a.chantierDepartement }}</td>
+                    <td>{{ d_a.description }}</td>
+                    <td>{{ d_a.referenceBCA }}</td>
+                    <td>{{ d_a.creationBCA ? d_a.creationBCA|date('d/m/Y') : '' }}</td>
+                    <td>{{ d_a.retardDABCA }} j</td>
+                    <td>{{ d_a.retardLivraison }} j</td>
+                    <td>{{ d_a.fournisseur }}</td>
+                    <td>{{ d_a.dateLivraison ? d_a.dateLivraison|date('d/m/Y') : '' }}</td>
+                    <td>
+                        <a href="{{ path('app_d_a_edit', {'id': d_a.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    <form method="post" action="{{ path('app_d_a_delete', {'id': d_a.id}) }}"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette DA ?');"
+                          style="display:inline-block">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ d_a.id) }}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="15">Aucun DA trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
