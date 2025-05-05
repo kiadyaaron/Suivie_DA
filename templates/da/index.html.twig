@@ -5,60 +5,109 @@
 {% block body %}
     <h1>Liste des Demandes d'Achat</h1>
 
-<a href="{{ path('app_d_a_new') }}" class="btn btn-success mb-3">+ Nouvelle DA</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="{{ path('app_d_a_new') }}" class="btn btn-success">+ Nouvelle DA</a>
 
-<div>
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark text-nowrap">
-            <tr>
-                <th>Référence DA</th>
-                <th>Date Création</th>
-                <th>État</th>
-                <th>Article</th>
-                <th>Département ou chantier</th>
-                <th>Description</th>
-                <th>Réf BCA</th>
-                <th>Création BCA</th>
-                <th>Retard DA-BCA</th>
-                <th>Retard Livraison</th>
-                <th>Fournisseur</th>
-                <th>Date Livraison</th>
-                <th>Options</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for d_a in d_as %}
-                <tr class="text-nowrap">
-                    <td>{{ d_a.referenceDA }}</td>
-                    <td>{{ d_a.dateCreationDA ? d_a.dateCreationDA|date('d/m/Y') : '' }}</td>
-                    <td>{{ d_a.etatDA }}</td>
-                    <td>{{ d_a.article }}</td>
-                    <td>{{ d_a.chantierDepartement }}</td>
-                    <td>{{ d_a.description }}</td>
-                    <td>{{ d_a.referenceBCA }}</td>
-                    <td>{{ d_a.creationBCA ? d_a.creationBCA|date('d/m/Y') : '' }}</td>
-                    <td>{{ d_a.retardDABCA }} j</td>
-                    <td>{{ d_a.retardLivraison }} j</td>
-                    <td>{{ d_a.fournisseur }}</td>
-                    <td>{{ d_a.dateLivraison ? d_a.dateLivraison|date('d/m/Y') : '' }}</td>
-                    <td>
-                        <a href="{{ path('app_d_a_edit', {'id': d_a.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                    <form method="post" action="{{ path('app_d_a_delete', {'id': d_a.id}) }}"
-                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette DA ?');"
-                          style="display:inline-block">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ d_a.id) }}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button class="btn btn-danger btn-sm">Supprimer</button>
-                    </form>
-                    </td>
-                </tr>
-            {% else %}
+        <form method="get" class="d-flex p-2 border rounded" style="max-width: 400px;">
+            <input type="text" name="search" class="form-control me-2 border-0" placeholder="Rechercher une DA..." value="{{ searchTerm }}">
+            <button class="btn btn-primary" type="submit">Rechercher</button>
+        </form>
+    </div>
+
+    <div class="mb-3">
+        <form method="get" class="mb-3 d-flex align-items-center gap-3">
+    <label class="form-label m-0">Filtrer par :</label>
+
+    {% set mois_fr = {
+        '01': 'Janvier',
+        '02': 'Février',
+        '03': 'Mars',
+        '04': 'Avril',
+        '05': 'Mai',
+        '06': 'Juin',
+        '07': 'Juillet',
+        '08': 'Août',
+        '09': 'Septembre',
+        '10': 'Octobre',
+        '11': 'Novembre',
+        '12': 'Décembre'
+    } %}
+    {% set annee = "now"|date("Y") %}
+
+    <select name="month_da" class="form-select w-auto" onchange="this.form.submit()">
+        <option value="">Mois création DA</option>
+        {% for numero, nom in mois_fr %}
+            {% set valeur = annee ~ '-' ~ numero %}
+            <option value="{{ valeur }}" {{ app.request.get('month_da') == valeur ? 'selected' : '' }}>
+                {{ nom }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="month_bca" class="form-select w-auto" onchange="this.form.submit()">
+        <option value="">Mois création BCA</option>
+        {% for numero, nom in mois_fr %}
+            {% set valeur = annee ~ '-' ~ numero %}
+            <option value="{{ valeur }}" {{ app.request.get('month_bca') == valeur ? 'selected' : '' }}>
+                {{ nom }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+    </div>
+
+    <div>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark text-nowrap">
                 <tr>
-                    <td colspan="15">Aucun DA trouvé.</td>
+                    <th>Référence DA</th>
+                    <th>Date Création</th>
+                    <th>État</th>
+                    <th>Article</th>
+                    <th>Département ou chantier</th>
+                    <th>Description</th>
+                    <th>Réf BCA</th>
+                    <th>Création BCA</th>
+                    <th>Retard DA-BCA</th>
+                    <th>Retard Livraison</th>
+                    <th>Fournisseur</th>
+                    <th>Date Livraison</th>
+                    <th>Options</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
+            </thead>
+            <tbody>
+                {% for d_a in d_as %}
+                    <tr class="text-nowrap">
+                        <td>{{ d_a.referenceDA }}</td>
+                        <td>{{ d_a.dateCreationDA ? d_a.dateCreationDA|date('d/m/Y') : '' }}</td>
+                        <td>{{ d_a.etatDA }}</td>
+                        <td>{{ d_a.article }}</td>
+                        <td>{{ d_a.chantierDepartement }}</td>
+                        <td>{{ d_a.description }}</td>
+                        <td>{{ d_a.referenceBCA }}</td>
+                        <td>{{ d_a.creationBCA ? d_a.creationBCA|date('d/m/Y') : '' }}</td>
+                        <td>{{ d_a.retardDABCA }} j</td>
+                        <td>{{ d_a.retardLivraison }} j</td>
+                        <td>{{ d_a.fournisseur }}</td>
+                        <td>{{ d_a.dateLivraison ? d_a.dateLivraison|date('d/m/Y') : '' }}</td>
+                        <td>
+                            <a href="{{ path('app_d_a_edit', {'id': d_a.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                            <form method="post" action="{{ path('app_d_a_delete', {'id': d_a.id}) }}"
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette DA ?');"
+                                  style="display:inline-block">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ d_a.id) }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="15">Aucun DA trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

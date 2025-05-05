@@ -15,12 +15,20 @@ use Symfony\Component\Routing\Attribute\Route;
 final class DAController extends AbstractController
 {
     #[Route(name: 'app_d_a_index', methods: ['GET'])]
-    public function index(DARepository $dARepository): Response
-    {
-        return $this->render('da/index.html.twig', [
-            'd_as' => $dARepository->findAll(),
-        ]);
-    }
+public function index(Request $request, DARepository $dARepository): Response
+{
+    $searchTerm = $request->query->get('search');
+    $monthDA = $request->query->get('month_da');
+    $monthBCA = $request->query->get('month_bca');
+
+    $dAs = $dARepository->searchByFieldsAndMonths($searchTerm, $monthDA, $monthBCA);
+
+    return $this->render('da/index.html.twig', [
+        'd_as' => $dAs,
+        'searchTerm' => $searchTerm,
+    ]);
+}
+
 
     #[Route('/new', name: 'app_d_a_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

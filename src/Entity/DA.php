@@ -188,7 +188,7 @@ class DA
 
     public function calculerRetards(): void
     {
-        if ($this->EtatDA === 'Annulée') {
+        if ($this->EtatDA === 'Validée') {
             // Ne pas recalculer si l'état est "Annulée"
             return;
         }
