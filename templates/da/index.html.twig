@@ -64,13 +64,13 @@
                     <th>Référence DA</th>
                     <th>Date Création</th>
                     <th>État</th>
+                    <th>Retard DA-BCA</th>
+                    <th>Retard Livraison</th>
                     <th>Article</th>
                     <th>Département ou chantier</th>
                     <th>Description</th>
                     <th>Réf BCA</th>
                     <th>Création BCA</th>
-                    <th>Retard DA-BCA</th>
-                    <th>Retard Livraison</th>
                     <th>Fournisseur</th>
                     <th>Date Livraison</th>
                     <th>Options</th>
@@ -82,13 +82,13 @@
                         <td>{{ d_a.referenceDA }}</td>
                         <td>{{ d_a.dateCreationDA ? d_a.dateCreationDA|date('d/m/Y') : '' }}</td>
                         <td>{{ d_a.etatDA }}</td>
+                        <td>{{ d_a.retardDABCA }} j</td>
+                        <td>{{ d_a.retardLivraison }} j</td>
                         <td>{{ d_a.article }}</td>
                         <td>{{ d_a.chantierDepartement }}</td>
                         <td>{{ d_a.description }}</td>
                         <td>{{ d_a.referenceBCA }}</td>
                         <td>{{ d_a.creationBCA ? d_a.creationBCA|date('d/m/Y') : '' }}</td>
-                        <td>{{ d_a.retardDABCA }} j</td>
-                        <td>{{ d_a.retardLivraison }} j</td>
                         <td>{{ d_a.fournisseur }}</td>
                         <td>{{ d_a.dateLivraison ? d_a.dateLivraison|date('d/m/Y') : '' }}</td>
                         <td>
