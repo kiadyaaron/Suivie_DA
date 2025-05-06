@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/d/a')]
+#[Route('/')]
 final class DAController extends AbstractController
 {
     #[Route(name: 'app_d_a_index', methods: ['GET'])]
@@ -20,8 +20,9 @@ public function index(Request $request, DARepository $dARepository): Response
     $searchTerm = $request->query->get('search');
     $monthDA = $request->query->get('month_da');
     $monthBCA = $request->query->get('month_bca');
+    $retardDABCA = $request->query->get('retard_dabca');
 
-    $dAs = $dARepository->searchByFieldsAndMonths($searchTerm, $monthDA, $monthBCA);
+    $dAs = $dARepository->searchByFieldsAndMonths($searchTerm, $monthDA, $monthBCA, $retardDABCA);
 
     return $this->render('da/index.html.twig', [
         'd_as' => $dAs,

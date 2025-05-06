@@ -34,7 +34,7 @@
     } %}
     {% set annee = "now"|date("Y") %}
 
-    <select name="month_da" class="form-select w-auto" onchange="this.form.submit()">
+    <select name="month_da" class="form-select w-auto">
         <option value="">Mois création DA</option>
         {% for numero, nom in mois_fr %}
             {% set valeur = annee ~ '-' ~ numero %}
@@ -44,7 +44,7 @@
         {% endfor %}
     </select>
 
-    <select name="month_bca" class="form-select w-auto" onchange="this.form.submit()">
+    <select name="month_bca" class="form-select w-auto">
         <option value="">Mois création BCA</option>
         {% for numero, nom in mois_fr %}
             {% set valeur = annee ~ '-' ~ numero %}
@@ -53,7 +53,18 @@
             </option>
         {% endfor %}
     </select>
+
+    <select name="retard_dabca" id="retard_dabca" class="form-select w-auto">
+        <option value="">Retard DA-BCA</option>
+        <option value=">0" {{ app.request.get('retard_dabca') == '>0' ? 'selected' }}>Supérieur à 0</option>
+        <option value="0" {{ app.request.get('retard_dabca') == '0' ? 'selected' }}>Égal à 0</option>
+    </select>
+
+    <div>
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+    </div>
 </form>
+
 
     </div>
 

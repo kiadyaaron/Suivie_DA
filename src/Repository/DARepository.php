@@ -16,7 +16,7 @@ class DARepository extends ServiceEntityRepository
         parent::__construct($registry, DA::class);
     }
 
-    public function searchByFieldsAndMonths(?string $term, ?string $monthDA, ?string $monthBCA): array
+    public function searchByFieldsAndMonths(?string $term, ?string $monthDA, ?string $monthBCA, ?string $retardDABCA): array
     {
         $qb = $this->createQueryBuilder('d');
 
@@ -54,6 +54,11 @@ class DARepository extends ServiceEntityRepository
                    ->setParameter('startBCA', $startBCA)
                    ->setParameter('endBCA', $endBCA);
             } catch (\Exception $e) {}
+        }
+        if ($retardDABCA === '>0') {
+            $qb->andWhere('d.RetardDABCA > 0');
+        } elseif ($retardDABCA === '0') {
+            $qb->andWhere('d.RetardDABCA = 0');
         }
 
         return $qb->orderBy('d.DateCreationDA', 'DESC')
