@@ -188,12 +188,7 @@ class DA
 
     public function calculerRetards(): void
     {
-        if ($this->EtatDA === 'Validée') {
-            // Ne pas recalculer si l'état est "Annulée"
-            return;
-        }
-
-        $today = new \DateTimeImmutable();
+         $today = new \DateTimeImmutable();
 
         if ($this->DateCreationDA) {
             $this->RetardDABCA = $this->DateCreationDA->diff($today)->days;

@@ -61,6 +61,12 @@
         <option value="0" {{ app.request.get('retard_dabca') == '0' ? 'selected' }}>Égal à 0</option>
     </select>
 
+    <select name="retard_livraison" id="retard_livraison" class="form-select w-auto">
+        <option value="">Retard Livraison</option>
+        <option value=">0" {{ app.request.get('retard_livraison') == '>0' ? 'selected' }}>Supérieur à 0</option>
+        <option value="0" {{ app.request.get('retard_livraison') == '0' ? 'selected' }}>Égal à 0</option>
+    </select>
+
     <div>
         <button type="submit" class="btn btn-primary">Filtrer</button>
     </div>

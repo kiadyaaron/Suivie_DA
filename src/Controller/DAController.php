@@ -21,8 +21,9 @@ final class DAController extends AbstractController
         $monthDA = $request->query->get('month_da');
         $monthBCA = $request->query->get('month_bca');
         $retardDABCA = $request->query->get('retard_dabca');
+        $retardLivraison = $request->query->get('retard_livraison');
 
-        $dAs = $dARepository->searchByFieldsAndMonths($searchTerm, $monthDA, $monthBCA, $retardDABCA);
+        $dAs = $dARepository->searchByFieldsAndMonths($searchTerm, $monthDA, $monthBCA, $retardDABCA, $retardLivraison);
 
         return $this->render('da/index.html.twig', [
             'd_as' => $dAs,

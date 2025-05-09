@@ -16,7 +16,7 @@ class DARepository extends ServiceEntityRepository
         parent::__construct($registry, DA::class);
     }
 
-    public function searchByFieldsAndMonths(?string $term, ?string $monthDA, ?string $monthBCA, ?string $retardDABCA): array
+    public function searchByFieldsAndMonths(?string $term, ?string $monthDA, ?string $monthBCA, ?string $retardDABCA, ?string $retardLivraison): array
     {
         $qb = $this->createQueryBuilder('d');
 
@@ -57,9 +57,19 @@ class DARepository extends ServiceEntityRepository
         }
         if ($retardDABCA === '>0') {
             $qb->andWhere('d.RetardDABCA > 0');
-        } elseif ($retardDABCA === '0') {
-            $qb->andWhere('d.RetardDABCA = 0');
+        } elseif ($retardLivraison === '0') {
+            $qb->andWhere('(d.RetardDABCA = 0 OR d.RetardLivraison IS NULL)');
         }
+
+        if ($retardLivraison !== null && $retardLivraison !== '') {
+            if ($retardLivraison === '>0') {
+                $qb->andWhere('d.RetardLivraison > 0');
+            } elseif ($retardLivraison === '0') {
+                $qb->andWhere('(d.RetardLivraison = 0 OR d.RetardLivraison IS NULL)');
+            }
+        }
+        
+    
 
         return $qb->orderBy('d.DateCreationDA', 'DESC')
                   ->getQuery()
