@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\DARepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: DARepository::class)]
 class DA
 {
@@ -166,7 +167,7 @@ class DA
 
     public function getRetardDABCA(): ?int
     {
-        return $this->RetardDABCA ?? 0;
+        return $this->RetardDABCA;
     }
 
     public function setRetardDABCA(?int $RetardDABCA): static
@@ -186,16 +187,23 @@ class DA
         return $this;
     }
 
-    public function calculerRetards(): void
+   public function calculerRetards(): void
     {
          $today = new \DateTimeImmutable();
 
-        if ($this->DateCreationDA) {
+        if ($this->DateCreationDA && !$this->CreationBCA) {
             $this->RetardDABCA = $this->DateCreationDA->diff($today)->days;
         }
 
-        if ($this->CreationBCA) {
+        if ($this->CreationBCA && !$this->DateLivraison) {
             $this->RetardLivraison = $this->CreationBCA->diff($today)->days;
-        }
+        } 
+    }
+
+
+    #[ORM\PostLoad]
+    public function updateRetardsAfterLoad(): void
+    {
+        $this->calculerRetards();
     }
 }
