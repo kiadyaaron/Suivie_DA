@@ -167,7 +167,7 @@ class DA
 
     public function getRetardDABCA(): ?int
     {
-        return $this->RetardDABCA;
+        return $this->RetardDABCA ?? 0;
     }
 
     public function setRetardDABCA(?int $RetardDABCA): static
@@ -189,6 +189,10 @@ class DA
 
    public function calculerRetards(): void
     {
+        if ($this->EtatDA === 'Annulée') {
+        return;
+        }
+
          $today = new \DateTimeImmutable();
 
         if ($this->DateCreationDA && !$this->CreationBCA) {

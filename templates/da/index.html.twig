@@ -84,7 +84,6 @@
                     <th>État</th>
                     <th>Retard DA/BCA</th>
                     <th>Retard BCA/Livraison</th>
-                    <th>Article</th>
                     <th>Département ou chantier</th>
                     <th>Description</th>
                     <th>Réf BCA</th>
@@ -100,13 +99,20 @@
                         <td>{{ d_a.referenceDA }}</td>
                         <td>{{ d_a.dateCreationDA ? d_a.dateCreationDA|date('d/m/Y') : '' }}</td>
                         <td>{{ d_a.etatDA }}</td>
-                        <td class="{{ d_a.retardDABCA > 0 ? 'bg-danger text-white' : '' }}">
-                        {{ d_a.retardDABCA }}
+                        <td class="{{ d_a.retardDABCA > 0 and d_a.retardDABCA <= 5 ? 'bg-warning text-dark' : (d_a.retardDABCA > 5 ? 'bg-danger text-white' : '') }}">
+                            {{ d_a.retardDABCA }}
+                            {% if d_a.retardDABCA > 5 and d_a.etatDA != 'Annulée' and != d_a.creationBCA %}
+                                <div class="small">⚠️ Retard de plus de 5 jours</div>
+                            {% endif %}
                         </td>
-                        <td class="{{ d_a.retardLivraison > 0 ? 'bg-danger text-white' : '' }}">
-                        {{ d_a.retardLivraison }}
+
+                        <td class="{{ d_a.retardLivraison > 0 and d_a.retardLivraison <= 5 ? 'bg-warning text-dark' : (d_a.retardLivraison > 5 ? 'bg-danger text-white' : '') }}">
+                            {{ d_a.retardLivraison }}
+                            {% if d_a.retardLivraison > 5 and d_a.etatDA != 'Annulée' %}
+                                <div class="small">⚠️ Retard de plus de 5 jours</div>
+                            {% endif %}
                         </td>
-                        <td>{{ d_a.article }}</td>
+
                         <td>{{ d_a.chantierDepartement }}</td>
                         <td>{{ d_a.description }}</td>
                         <td>{{ d_a.referenceBCA }}</td>
