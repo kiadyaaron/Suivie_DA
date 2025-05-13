@@ -14,8 +14,8 @@
         <tr><th>Description</th><td>{{ d_a.Description }}</td></tr>
         <tr><th>Réf BCA</th><td>{{ d_a.ReferenceBCA }}</td></tr>
         <tr><th>Création BCA</th><td>{{ d_a.CreationBCA ? d_a.CreationBCA|date('Y-m-d') : '' }}</td></tr>
-        <tr><th>Retard DA-BCA</th><td>{{ d_a.retardDABCA }} jours</td></tr>
-        <tr><th>Retard Livraison</th><td>{{ d_a.retardLivraison }} jours</td></tr>
+        <tr><th>Retard DA/BCA</th><td>{{ d_a.retardDABCA }} jours</td></tr>
+        <tr><th>Retard BCA/Livraison</th><td>{{ d_a.retardLivraison }} jours</td></tr>
         <tr><th>Fournisseur</th><td>{{ d_a.Fournisseur }}</td></tr>
         <tr><th>Date Livraison</th><td>{{ d_a.DateLivraison ? d_a.DateLivraison|date('Y-m-d') : '' }}</td></tr>
     </table>
