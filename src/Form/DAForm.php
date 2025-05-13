@@ -30,9 +30,6 @@ class DAForm extends AbstractType
                 ],
                 'label' => 'État de la DA',
             ])
-            ->add('Article', TextType::class, [
-                'label' => 'Article'
-            ])
             ->add('ChantierDepartement', TextType::class, [
                 'label' => 'Chantier ou département'
             ])
@@ -48,10 +45,6 @@ class DAForm extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'label' => 'Date de création BCA',
-                'required' => false,
-            ])
-            ->add('Fournisseur',  TextType::class, [
-                'label' => 'Fournisseur',
                 'required' => false,
             ])
             ->add('DateLivraison', DateType::class, [

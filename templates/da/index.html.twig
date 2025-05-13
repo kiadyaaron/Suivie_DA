@@ -88,7 +88,6 @@
                     <th>Description</th>
                     <th>Réf BCA</th>
                     <th>Création BCA</th>
-                    <th>Fournisseur</th>
                     <th>Date Livraison</th>
                     <th>Options</th>
                 </tr>
@@ -101,7 +100,7 @@
                         <td>{{ d_a.etatDA }}</td>
                         <td class="{{ d_a.retardDABCA > 0 and d_a.retardDABCA <= 5 ? 'bg-warning text-dark' : (d_a.retardDABCA > 5 ? 'bg-danger text-white' : '') }}">
                             {{ d_a.retardDABCA }}
-                            {% if d_a.retardDABCA > 5 and d_a.etatDA != 'Annulée' and != d_a.creationBCA %}
+                            {% if d_a.retardDABCA > 5 and d_a.etatDA != 'Annulée' %}
                                 <div class="small">⚠️ Retard de plus de 5 jours</div>
                             {% endif %}
                         </td>
@@ -117,7 +116,6 @@
                         <td>{{ d_a.description }}</td>
                         <td>{{ d_a.referenceBCA }}</td>
                         <td>{{ d_a.creationBCA ? d_a.creationBCA|date('d/m/Y') : '' }}</td>
-                        <td>{{ d_a.fournisseur }}</td>
                         <td>{{ d_a.dateLivraison ? d_a.dateLivraison|date('d/m/Y') : '' }}</td>
                         <td>
                             <a href="{{ path('app_d_a_edit', {'id': d_a.id}) }}" class="btn btn-warning btn-sm">Modifier</a>

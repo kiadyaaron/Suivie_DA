@@ -25,11 +25,9 @@ class DARepository extends ServiceEntityRepository
                 $qb->expr()->orX(
                     $qb->expr()->like('d.ReferenceDA', ':term'),
                     $qb->expr()->like('d.EtatDA', ':term'),
-                    $qb->expr()->like('d.Article', ':term'),
                     $qb->expr()->like('d.ChantierDepartement', ':term'),
                     $qb->expr()->like('d.Description', ':term'),
                     $qb->expr()->like('d.ReferenceBCA', ':term'),
-                    $qb->expr()->like('d.Fournisseur', ':term')
                 )
             )->setParameter('term', '%' . $term . '%');
         }

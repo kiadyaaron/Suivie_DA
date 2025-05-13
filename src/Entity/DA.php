@@ -24,9 +24,6 @@ class DA
     private ?string $EtatDA = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Article = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $ChantierDepartement = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -37,9 +34,6 @@ class DA
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $CreationBCA = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Fournisseur = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $DateLivraison = null;
@@ -88,17 +82,6 @@ class DA
         return $this;
     }
 
-    public function getArticle(): ?string
-    {
-        return $this->Article;
-    }
-
-    public function setArticle(string $Article): static
-    {
-        $this->Article = $Article;
-        return $this;
-    }
-
     public function getChantierDepartement(): ?string
     {
         return $this->ChantierDepartement;
@@ -140,17 +123,6 @@ class DA
     public function setCreationBCA(?\DateTimeInterface $CreationBCA): static
     {
         $this->CreationBCA = $CreationBCA;
-        return $this;
-    }
-
-    public function getFournisseur(): ?string
-    {
-        return $this->Fournisseur;
-    }
-
-    public function setFournisseur(?string $Fournisseur): static
-    {
-        $this->Fournisseur = $Fournisseur;
         return $this;
     }
 
