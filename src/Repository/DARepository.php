@@ -69,7 +69,9 @@ class DARepository extends ServiceEntityRepository
         
     
 
-        return $qb->orderBy('d.DateCreationDA', 'DESC')
+        return $qb->addSelect("CASE WHEN d.EtatDA = 'Annulée' THEN 1 ELSE 0 END AS HIDDEN is_annulee")
+                  ->orderBy('is_annulee', 'ASC')
+                  ->addOrderBy('d.RetardDABCA', 'DESC')
                   ->getQuery()
                   ->getResult();
     }

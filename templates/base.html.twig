@@ -21,10 +21,12 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body style="background-color: #f8f9fa; padding-top: 60px;">
+    <body style="background-color: #f8f9fa; padding-top: 70px;">
     <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="{{ path('app_d_a_index') }}">OTI</a>
+        <a class="navbar-brand" href="{{ path('app_d_a_index') }}">
+             <img src="{{ asset('images/Logo_OTI.jpg') }}" alt="Logo OTI" style="height: 40px;">
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
