@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<style>
+    .form-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 15px;
+        background-color: #f8f9fa;
+    }
+
+    .form-card {
+        background-color: white;
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        width: 100%;
+        max-width: 600px;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-title {
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        color: hsl(241, 100.00%, 53.90%);
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="form-card">
+        <div class="form-title">Inscription</div>
+
+        {{ form_start(form) }}
+
+            <div class="mb-3">
+                {{ form_label(form.name, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.firstname, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.firstname) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.Matricule, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.Matricule, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.Matricule) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.email, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.email) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.password.first, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.password.first, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.password.first) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.password.second, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.password.second, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.password.second) }}
+            </div>
+
+            <div class="text-center">
+                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary w-100'}}) }}
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

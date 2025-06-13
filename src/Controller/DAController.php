@@ -10,8 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use App\Service\DAEmailService;
 
-#[Route('/')]
+#[Route('/da')]
 final class DAController extends AbstractController
 {
     #[Route(name: 'app_d_a_index', methods: ['GET'])]
@@ -52,7 +57,7 @@ final class DAController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_d_a_show', methods: ['GET'])]
+    #[Route('/{id<\d+>}', name: 'app_d_a_show', methods: ['GET'])]
     public function show(int $id, DARepository $dARepository): Response
     {
         $dA = $dARepository->find($id);
@@ -62,7 +67,7 @@ final class DAController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_d_a_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id<\d+>}/edit', name: 'app_d_a_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id, DARepository $dARepository, EntityManagerInterface $entityManager): Response
     {
         $dA = $dARepository->find($id);
@@ -87,7 +92,7 @@ final class DAController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_d_a_delete', methods: ['POST'])]
+    #[Route('/{id<\d+>}', name: 'app_d_a_delete', methods: ['POST'])]
     public function delete(Request $request, int $id, DARepository $dARepository, EntityManagerInterface $entityManager): Response
     {
         $dA = $dARepository->find($id);
@@ -103,4 +108,79 @@ final class DAController extends AbstractController
 
         return $this->redirectToRoute('app_d_a_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/export/excel', name: 'app_d_a_export_excel', methods: ['GET'])]
+public function exportToExcel(Request $request, DARepository $daRepository): StreamedResponse
+{
+    // Récupérer les mêmes paramètres que dans ton index
+    $term = $request->query->get('search');
+    $monthDA = $request->query->get('monthDA');
+    $monthBCA = $request->query->get('monthBCA');
+    $retardDABCA = $request->query->get('retardDABCA');
+    $retardLivraison = $request->query->get('retardLivraison');
+
+    // Utiliser ta méthode personnalisée de recherche
+    $das = $daRepository->searchByFieldsAndMonths($term, $monthDA, $monthBCA, $retardDABCA, $retardLivraison);
+
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    $headers = [
+        'ID',
+        'ReferenceDA',
+        'DateCreationDA',
+        'EtatDA',
+        'ChantierDepartement',
+        'Description',
+        'ReferenceBCA',
+        'CreationBCA',
+        'DateLivraison',
+        'RetardDA_BCA',
+        'RetardLivraison',
+    ];
+
+    foreach ($headers as $col => $header) {
+        $sheet->setCellValueByColumnAndRow($col + 1, 1, $header);
+    }
+
+    $row = 2;
+    foreach ($das as $da) {
+        $sheet->setCellValueByColumnAndRow(1, $row, $da->getId());
+        $sheet->setCellValueByColumnAndRow(2, $row, $da->getReferenceDA());
+        $sheet->setCellValueByColumnAndRow(3, $row, $da->getDateCreationDA()?->format('Y-m-d'));
+        $sheet->setCellValueByColumnAndRow(4, $row, $da->getEtatDA());
+        $sheet->setCellValueByColumnAndRow(5, $row, $da->getChantierDepartement());
+        $sheet->setCellValueByColumnAndRow(6, $row, $da->getDescription());
+        $sheet->setCellValueByColumnAndRow(7, $row, $da->getReferenceBCA());
+        $sheet->setCellValueByColumnAndRow(8, $row, $da->getCreationBCA()?->format('Y-m-d'));
+        $sheet->setCellValueByColumnAndRow(9, $row, $da->getDateLivraison()?->format('Y-m-d'));
+        $sheet->setCellValueByColumnAndRow(10, $row, $da->getRetardDABCA());
+        $sheet->setCellValueByColumnAndRow(11, $row, $da->getRetardLivraison());
+        $row++;
+    }
+
+    $writer = new Xlsx($spreadsheet);
+
+    $response = new StreamedResponse(function () use ($writer) {
+        $writer->save('php://output');
+    });
+
+    $disposition = $response->headers->makeDisposition(
+        ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+        'DAs_filtrees.xlsx'
+    );
+
+    $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    $response->headers->set('Content-Disposition', $disposition);
+
+    return $response;
+}
+    #[Route('/envoyer-da-validees', name: 'send_validated_das')]
+    public function sendValidatedDAs(DAEmailService $daEmailService): Response
+    {
+        $daEmailService->sendValidatedDAs('ramijoroaaaron@gmail.com', 'andriamitantsoafabyh@gmail.com');
+        return new Response('Email envoyé avec succès');
+    }
+
+
 }

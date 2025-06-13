@@ -3,16 +3,53 @@
 {% block title %}Suivi des demandes d'achat{% endblock %}
 
 {% block body %}
+<style>
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-custom th,
+    .table-custom td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        vertical-align: top;
+    }
+
+    .description-col {
+        width: 350px;
+        max-width: 350px;
+        min-width: 350px;
+        word-wrap: break-word;
+        white-space: normal;
+    }
+</style>
 
     <h2>Liste des Demandes d'Achat</h2>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
+
+        {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('app_d_a_new') }}" class="btn btn-success">+ Nouvelle DA</a>
 
+        <a href="{{ path('send_validated_das') }}" class="btn btn-success">Envoyer les DAs validées par mail</a>
+
+        <a href="{{ path('app_d_a_export_excel', {
+            'search': app.request.get('search'),
+            'monthDA': app.request.get('monthDA'),
+            'monthBCA': app.request.get('monthBCA'),
+            'retardDABCA': app.request.get('retardDABCA'),
+            'retardLivraison': app.request.get('retardLivraison') })
+        }}" 
+        class="btn btn-success"> Exporter les DAs filtrées
+        </a>
+
+        {% endif %}
         <form method="get" class="d-flex p-2 border rounded" style="max-width: 400px;">
             <input type="text" name="search" class="form-control me-2 border-0" placeholder="Rechercher une DA..." value="{{ searchTerm }}">
             <button class="btn btn-primary" type="submit">Rechercher</button>
         </form>
+
     </div>
 
     <div class="mb-3">
@@ -76,7 +113,7 @@
     </div>
 
     <div>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped table-custom">
             <thead class="table-dark text-nowrap">
                 <tr>
                     <th>Référence DA</th>
@@ -84,12 +121,14 @@
                     <th>État</th>
                     <th>Retard DA/BCA</th>
                     <th>Retard BCA/Livraison</th>
-                    <th>Département ou chantier</th>
-                    <th>Description</th>
+                    <th class="description-col">Département ou chantier</th>
+                    <th class="description-col">Description</th>
                     <th>Réf BCA</th>
                     <th>Création BCA</th>
                     <th>Date Livraison</th>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <th>Options</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -112,11 +151,12 @@
                             {% endif %}
                         </td>
 
-                        <td>{{ d_a.chantierDepartement }}</td>
-                        <td>{{ d_a.description }}</td>
+                        <td class="description-col">{{ d_a.chantierDepartement }}</td>
+                        <td class="description-col">{{ d_a.description }}</td>
                         <td>{{ d_a.referenceBCA }}</td>
                         <td>{{ d_a.creationBCA ? d_a.creationBCA|date('d/m/Y') : '' }}</td>
                         <td>{{ d_a.dateLivraison ? d_a.dateLivraison|date('d/m/Y') : '' }}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <td>
                             <a href="{{ path('app_d_a_edit', {'id': d_a.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                             <form method="post" action="{{ path('app_d_a_delete', {'id': d_a.id}) }}"
@@ -127,6 +167,7 @@
                                 <button class="btn btn-danger btn-sm">Supprimer</button>
                             </form>
                         </td>
+                        {% endif %}
                     </tr>
                 {% else %}
                     <tr>
